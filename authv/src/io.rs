@@ -14,6 +14,10 @@ pub fn is_directory(path: &String) -> bool {
     return Path::new(path).exists() && Path::new(path).is_dir();
 }
 
+pub fn is_file(path: &String) -> bool {
+    return Path::new(path).exists() && Path::new(path).is_file();
+}
+
 pub fn get_directory(directory: &String) -> HashMap<String, String> {
     let mut content: HashMap<String, String> = HashMap::new();
     let entries = fs::read_dir(directory).unwrap();
@@ -45,11 +49,22 @@ pub fn open_file(path: &str) -> io::Result<Vec<u8>> {
     return Ok(contents);
 }
 
-pub fn save_file(path: String, content: HashMap<String, String>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn save_json_file(path: String, content: HashMap<String, String>) -> Result<(), Box<dyn std::error::Error>> {
     let json_data = serde_json::to_string_pretty(&content)?;
 
     let mut file = File::create(path)?;
     file.write_all(json_data.as_bytes())?;
 
     Ok(())
+}
+
+pub fn load_json_file(path: String) -> Result<HashMap<String, String>, Box<dyn std::error::Error>> {
+    let mut file = File::open(&path)?;
+    let mut json_data = String::new();
+
+    file.read_to_string(&mut json_data)?;
+
+    let content: HashMap<String, String> = serde_json::from_str(&json_data)?;
+
+    Ok(content)
 }
