@@ -1,6 +1,6 @@
 use std::path::Path;
 use std::fs::{self, File};
-use std::io::{self, Read};
+use std::io::{self, Read, Write};
 use sha2::{Sha256, Digest};
 use std::collections::HashMap;
 
@@ -43,4 +43,13 @@ pub fn open_file(path: &str) -> io::Result<Vec<u8>> {
     file.read_to_end(&mut contents)?;
 
     return Ok(contents);
+}
+
+pub fn save_file(path: String, content: HashMap<String, String>) -> Result<(), Box<dyn std::error::Error>> {
+    let json_data = serde_json::to_string_pretty(&content)?;
+
+    let mut file = File::create(path)?;
+    file.write_all(json_data.as_bytes())?;
+
+    Ok(())
 }

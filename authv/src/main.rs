@@ -36,8 +36,8 @@ fn hash_files(content: HashMap<String, String>) -> HashMap<String, String> {
             Ok(file_content) => {
                 let element_hash = io::hash(&file_content);
                 let element_hash_hex = hex::encode(element_hash);
-                info!("Hash for '{}': {}", name, element_hash_hex);
-                hash_table.insert(name.clone(), element_hash_hex);
+                info!("{}", element_hash_hex);
+                hash_table.insert(path.clone(), element_hash_hex);
             }
             Err(e) => {
                 error!("Error reading file '{}': {}", path, e);
@@ -50,8 +50,10 @@ fn hash_files(content: HashMap<String, String>) -> HashMap<String, String> {
 
 fn main() {
     let arguments: Vec<String> = env::args().collect();
+    let hash_table_path: String = String::from("table.avht");
     let mut directory: String = String::new();
     let mut content: HashMap<String, String> = HashMap::new();
+    let mut hash_table: HashMap<String, String> = HashMap::new();
 
     setup();
 
@@ -61,7 +63,9 @@ fn main() {
             info!("Directory set to: {}", directory);
             content = io::get_directory(&directory);
             information(content.clone());
-            hash_files(content.clone());
+            hash_table = hash_files(content.clone());
+            io::save_file(hash_table_path.clone(), hash_table);
+            info!("Saved hash table at: {}", hash_table_path);
         } else {
             error!("Directory '{}' not found", directory);
         }
