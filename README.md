@@ -22,6 +22,3 @@ cargo build --release
 ./target/debug/authv <directory>
 ```
 
-## Todo
-- Check the files with the provided config file
-- Generate a signature file
