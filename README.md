@@ -11,15 +11,26 @@ cd authv
 cargo build
 ```
 
+## Run debug
+```BASH
+./target/debug/authv <directory>
+```
+
 ## Build release
 ```BASH
 cd authv
 cargo build --release
 ```
 
-## Run
+## Run release
+### Linux
 ```BASH
-./target/debug/authv <directory>
+./authv <directory>
+```
+
+### Windows
+```BASH
+./authv.exe <directory>
 ```
 
 ## Example
